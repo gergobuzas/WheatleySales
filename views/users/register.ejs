@@ -1,0 +1,43 @@
+<% layout('/layouts/boilerplate') %> 
+<div class="row">
+    <h1 class="text-center">
+     Register a new account!
+    </h1>
+    <div class="col-6 offset-3">
+        <form action="/users/register" method="post" class="validated-form" novalidate>
+          <div class="mb-3">
+                <label class="form-label" for="username">Username:</label>
+                <input class="form-control" type="username" name="username" id="username" placeholder="Username" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please give a valid email address!
+                </div>                          
+            </div>
+          
+          <div class="mb-3">
+                <label class="form-label" for="email">Email address:</label>
+                <input class="form-control" type="email" name="email" id="email" placeholder="Email" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please give a valid email address!
+                </div>                          
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="password">Password:</label>
+                <input class="form-control"  type="password" name="password" id="password" placeholder="Password" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please give a valid password!
+                </div>
+            </div>
+            <button class="btn btn-success mb-3">Create new account</button>
+        </form>
+        <a class="btn btn-danger" href="/users/products">Go back to home page</a>
+    </div>
+</div>

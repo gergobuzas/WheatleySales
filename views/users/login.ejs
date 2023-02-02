@@ -1,0 +1,33 @@
+<% layout('/layouts/boilerplate') %> 
+<div class="row">
+    <h1 class="text-center">
+     Login to an existing account!
+    </h1>
+    <div class="col-6 offset-3">
+        <form action="/users/login" method="post" class="validated-form" novalidate>
+            <div class="mb-3">
+                <label class="form-label" for="username">Email address:</label>
+                <input class="form-control" type="username" name="username" id="username" placeholder="Username" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please give a valid email address!
+                </div>                          
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="password">Password:</label>
+                <input class="form-control"  type="password" name="password" id="password" placeholder="Password" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please give a valid password!
+                </div>
+            </div>
+            <button class="btn btn-success mb-3">Login</button>
+            <a class="btn btn-danger mb-3" href="/products">Go back to home page</a>
+        </form>
+        
+    </div>
+</div>
