@@ -8,6 +8,7 @@ const catchAsync = require('../utilities/catchAsync');
 const passport = require('passport');
 const { userSchema } = require('../schemas/schemas.js');
 const methodOverride = require('method-override');
+const { isLoggedIn } = require('../middleware/isLoggedIn');
 
 
 
@@ -24,11 +25,11 @@ router.post('/register', async (req, res) => {
      User.register(new User({ email: email, username: username }), password, function (err, user) {
           if (err) {
                req.flash('error', 'Username or Email already exists!');
-               res.redirect('/users/register');
+               res.redirect('/register');
           }
           else {
                req.flash('success', 'Account has been created!');
-               res.redirect(`/users/login`);
+               res.redirect(`/login`);
           }
      });
 });
@@ -36,40 +37,30 @@ router.post('/register', async (req, res) => {
 
 router.get('/login', (req, res) => {
      res.render('users/login.ejs');
+     console.log('THIS USER IS:....', req.user);
 })
 
-router.post("/login", passport.authenticate('local', {failureFlash: true, failureRedirect: '/users/login'}) , (req, res) => {
+router.post("/login", passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}) , (req, res) => {
      req.flash('success', 'Welcome back!');
      res.redirect('../products');
-    
-     /*if (!req.body.username) {
-         req.flash('error', 'No username was given!');
-    }
-    else if (!req.body.password) {
-        req.flash('error', 'No password was given!');
-    }
-    else {
-        passport.authenticate("local", function (err, user, info) {
-            if (err) {
-                 req.flash('error', 'Something went wrong...');
-            }
-            else {
-                if (!user) {
-                     req.flash('error', 'Wrong username or password...');
-                }
-                else {
-                    const token = jwt.sign({ userId: user._id, username: user.username }, secretkey, { expiresIn: "24h" });
-                    res.json({ success: true, message: "Authentication successful", token: token });
-                }
-            }
-        })(req, res);
-    }*/
+     console.log('THIS USER IS:....', req.user);
 });
 
 
-router.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
+router.get('/logout', (req, res) => {
+     if (req.isAuthenticated()) {
+          req.logout((err) => {
+               if (err) {
+                    return next(err);
+               }
+               req.flash('success', 'Successfully logged out!');
+               res.redirect('/');
+          });
+     }
+     else {
+          req.flash('error', 'You must be logged in first!');
+               res.redirect('/login');
+     }
 });
 
 router.post('/login', (req, res) => {
@@ -85,12 +76,7 @@ router.post('/login', (req, res) => {
 });
 
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
-}
-
-router.get('/profile', ensureAuthenticated, function(req, res) {
+router.get('/profile', isLoggedIn, function(req, res) {
   res.render('profile', { user: req.user });
 });
 

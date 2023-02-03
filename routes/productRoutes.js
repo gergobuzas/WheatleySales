@@ -7,17 +7,10 @@ const Product = require('../models/products')
 const catchAsync = require('../utilities/catchAsync');
 const { productSchema } = require('../schemas/schemas.js');
 const methodOverride = require('method-override');
+const { isLoggedIn } = require('../middleware/isLoggedIn');
+const { validateProduct } = require('../middleware/validateProduct');
 
-const validateProduct = (req, res, next) => {
-     const {error} = productSchema.validate(req.body);
-     if (error) {
-          const msg = error.details.map(el => el.message).join(', ');
-          throw new expressError(msg);
-     }
-     else {
-          next();
-     }
-}
+
 
 router.use(express.json()) // for parsing application/json
 router.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -28,7 +21,7 @@ router.get('/', catchAsync(async (req, res, next) => {
      res.render('../views/products/index.ejs', {products});
 }))
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
      res.render('../views/products/new.ejs');
 })
 
@@ -42,7 +35,7 @@ router.get('/:id', catchAsync(async (req, res, next) => {
      res.render('../views/products/show.ejs', {foundProduct});
 }))
 
-router.get('/:id/edit', catchAsync(async (req, res, next) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res, next) => {
      const updatedProduct = await Product.findById(req.params.id);
      if (!updatedProduct) { 
           req.flash('error', 'The listing doesnt exist');
@@ -51,7 +44,7 @@ router.get('/:id/edit', catchAsync(async (req, res, next) => {
      res.render('../views/products/edit', {updatedProduct});
 }))
 
-router.post('/', validateProduct, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateProduct, catchAsync(async (req, res, next) => {
      //if (!req.body.product) { throw new expressError('Invalid product data', 400); }
      req.flash('success', 'Succesfully added a new listing!');
      const newProduct  = new Product(req.body.product);
@@ -59,13 +52,13 @@ router.post('/', validateProduct, catchAsync(async (req, res, next) => {
      res.redirect(`../products/${newProduct._id}`);
 }))
 
-router.put('/:id', validateProduct, catchAsync(async (req, res, next) => {
+router.put('/:id', isLoggedIn, validateProduct, catchAsync(async (req, res, next) => {
      const updatedProduct = req.body.product;
      const product = await Product.findByIdAndUpdate(req.params.id, updatedProduct);
      res.redirect(`../products/${product._id}`);
 }))
 
-router.delete('/:id', catchAsync(async (req, res, next) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res, next) => {
      req.flash('success', 'Succesfully deleted a listing!');
      const {id} = req.params;
      await Product.findByIdAndDelete(id);

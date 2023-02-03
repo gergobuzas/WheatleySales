@@ -28,6 +28,11 @@ async function main() {
      console.log('MONGO CONNECTED')
 }
 
+
+app.engine('ejs', engine);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 const sessionConfig = {
      secret: 'thisshouldbeabettersecret',
      resave: false,
@@ -43,19 +48,6 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
-app.use((req, res, next) => {
-     res.locals.success = req.flash('success');
-     res.locals.error = req.flash('error');
-     next();
-});
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use('/products', productRoutes);
-app.use('/users', userRoutes);
-
-
-passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -65,29 +57,24 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(methodOverride('_method')) // override with POST having ?_method=DELETE
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+app.use((req, res, next) => {
+     res.locals.currentUser = req.user;
+     res.locals.success = req.flash('success');
+     res.locals.error = req.flash('error');
+     next();
+});
 
 
-app.engine('ejs', engine);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-
-
+app.use('/', userRoutes);
+app.use('/products', productRoutes);
 
 app.get('/', (req, res) => {
      res.render('home.ejs');
 })
-
-app.get('/register', (req, res) => {
-     res.redirect('users/register');
-})
-
-app.get('/login', (req, res) => {
-     res.redirect('users/login');
-})
-
-
-
 
 app.all('*', (req, res, next) => {
      next(new expressError('Page not found', 404));
