@@ -9,6 +9,10 @@ const { productSchema } = require('../schemas/schemas.js');
 const methodOverride = require('method-override');
 const { isLoggedIn } = require('../middleware/isLoggedIn');
 const { validateProduct } = require('../middleware/validateProduct');
+const { isAuthor } = require('../middleware/isAuthor');
+const passport = require('passport');
+const User = require('../models/users')
+const { userSchema } = require('../schemas/schemas.js');
 
 
 
@@ -25,9 +29,21 @@ router.get('/new', isLoggedIn, (req, res) => {
      res.render('../views/products/new.ejs');
 })
 
+
+router.post('/', isLoggedIn, validateProduct, catchAsync(async (req, res, next) => {
+     req.flash('success', 'Succesfully added a new listing!');
+     const newProduct = new Product(req.body.product);
+     console.log(req.user);
+     newProduct.author = req.user;
+     console.log("The product that you put up for sale:\n", newProduct);
+     await newProduct.save();
+     res.redirect(`../products/${newProduct._id}`);
+}))
+
 router.get('/:id', catchAsync(async (req, res, next) => {
      const { id } = req.params;
-     const foundProduct = await Product.findById(id);
+     const foundProduct = await Product.findById(id).populate('author');
+     console.log(foundProduct);
      if (!foundProduct) { 
           req.flash('error', 'The listing doesnt exist');
           res.redirect('/products');
@@ -35,8 +51,8 @@ router.get('/:id', catchAsync(async (req, res, next) => {
      res.render('../views/products/show.ejs', {foundProduct});
 }))
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res, next) => {
-     const updatedProduct = await Product.findById(req.params.id);
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res, next) => {
+     const updatedProduct = await Product.findById(req.params.id).populate('author');
      if (!updatedProduct) { 
           req.flash('error', 'The listing doesnt exist');
           res.redirect('/products');
@@ -44,24 +60,17 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res, next) => {
      res.render('../views/products/edit', {updatedProduct});
 }))
 
-router.post('/', isLoggedIn, validateProduct, catchAsync(async (req, res, next) => {
-     //if (!req.body.product) { throw new expressError('Invalid product data', 400); }
-     req.flash('success', 'Succesfully added a new listing!');
-     const newProduct  = new Product(req.body.product);
-     await newProduct.save();
-     res.redirect(`../products/${newProduct._id}`);
-}))
 
-router.put('/:id', isLoggedIn, validateProduct, catchAsync(async (req, res, next) => {
+router.put('/:id', isLoggedIn, isAuthor, validateProduct, catchAsync(async (req, res, next) => {
      const updatedProduct = req.body.product;
      const product = await Product.findByIdAndUpdate(req.params.id, updatedProduct);
      res.redirect(`../products/${product._id}`);
 }))
 
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res, next) => {
-     req.flash('success', 'Succesfully deleted a listing!');
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res, next) => {
      const {id} = req.params;
      await Product.findByIdAndDelete(id);
+     req.flash('success', 'Succesfully deleted a listing!');
      res.redirect('../');
 }))
 

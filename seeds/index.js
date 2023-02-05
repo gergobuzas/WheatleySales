@@ -17,7 +17,8 @@ const seedDB = async () => {
         const random1000 = Math.floor(Math.random() * 1000);
         var brand = sample(brands);
         var productName = sample(productNames);
-        const newCamp = new Product({
+         const newCamp = new Product({
+            author: '63dd50ec33d3ceaa5bb017f6',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${brand} ${productName}`,
             price: `${Math.floor(Math.random() * 1000)}`,

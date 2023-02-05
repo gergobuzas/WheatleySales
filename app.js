@@ -5,17 +5,13 @@ const mongoose = require('mongoose');
 const engine = require('ejs-mate');
 const methodOverride = require('method-override');
 const User = require('./models/users')
-const catchAsync = require('./utilities/catchAsync');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const expressError = require('./utilities/expressError');
-const Schema = mongoose.Schema;
-const passportLocalMongoose = require('passport-local-mongoose');
-const { productSchema } = require('./schemas/schemas.js');
-const { randomUUID } = require('crypto');
-const { Passport } = require('passport');
+
+
 
 const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');

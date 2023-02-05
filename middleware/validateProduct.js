@@ -1,3 +1,5 @@
+const { productSchema } = require('../schemas/schemas');
+
 module.exports.validateProduct = (req, res, next) => {
      const {error} = productSchema.validate(req.body);
      if (error) {
