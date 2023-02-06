@@ -33,9 +33,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 router.post('/', isLoggedIn, validateProduct, catchAsync(async (req, res, next) => {
      req.flash('success', 'Succesfully added a new listing!');
      const newProduct = new Product(req.body.product);
-     console.log(req.user);
      newProduct.author = req.user;
-     console.log("The product that you put up for sale:\n", newProduct);
      await newProduct.save();
      res.redirect(`../products/${newProduct._id}`);
 }))
@@ -43,7 +41,6 @@ router.post('/', isLoggedIn, validateProduct, catchAsync(async (req, res, next) 
 router.get('/:id', catchAsync(async (req, res, next) => {
      const { id } = req.params;
      const foundProduct = await Product.findById(id).populate('author');
-     console.log(foundProduct);
      if (!foundProduct) { 
           req.flash('error', 'The listing doesnt exist');
           res.redirect('/products');

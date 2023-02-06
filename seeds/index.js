@@ -13,7 +13,7 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
     await Product.deleteMany({});
-    for(let i = 0; i < 100; i++){
+    for(let i = 0; i < 5; i++){
         const random1000 = Math.floor(Math.random() * 1000);
         var brand = sample(brands);
         var productName = sample(productNames);

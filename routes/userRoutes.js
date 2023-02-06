@@ -3,7 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const expressError = require('../utilities/expressError');
 const Schema = mongoose.Schema;
-const User = require('../models/users')
+const User = require('../models/users');
+const Product = require('../models/products')
 const catchAsync = require('../utilities/catchAsync');
 const passport = require('passport');
 const { userSchema } = require('../schemas/schemas.js');
@@ -40,14 +41,12 @@ router.post('/register', catchAsync(async (req, res, next) => {
 
 router.get('/login', (req, res) => {
      res.render('users/login.ejs');
-     console.log('THIS USER IS:....', req.user);
 })
 
 router.post("/login", passport.authenticate('local', {failureFlash: true, failureRedirect: '/login', keepSessionInfo: true}) , (req, res) => {
      const redirectUrl = req.session.returnTo || '/profile';
      req.flash('success', 'Welcome back!');
      res.redirect(redirectUrl);
-     console.log('THIS USER IS:....', req.user);
 });
 
 
@@ -61,14 +60,38 @@ router.get('/logout', (req, res) => {
           });
 });
 
-router.get('/profile', isLoggedIn, function (req, res) {
-     const { username } = req.user;
-     res.render('users/profile', {username});
+router.get('/profile', isLoggedIn, async function (req, res) {
+     const userData = req.user;
+     const products = await Product.find({});
+     var profileProducts = [];
+     for (const product of products){
+          if (product.author._id.equals(userData._id))
+               profileProducts.push(product);
+     }
+     res.render('users/profile', { userData, profileProducts });
+});
+
+router.get('/users/:id', (req, res) => {
+     const { id } = req.params;
+     res.redirect(`/profile/${id}`);
 });
 
 router.get('/profile/:id', catchAsync(async (req, res, next) => {
-     const profile = await User.findById(req.params.id);
-     res.render('profile', {profile});
+     const { id } = req.params;
+     const profile = await User.findById(id);
+     if (!profile) {
+          req.flash('error', "Profile doesn't exist!");
+          return res.redirect('/products');
+     }
+     
+     const products = await Product.find({});
+     var profileProducts = [];
+     for (const product of products){
+          if (product.author._id.equals(id))
+               profileProducts.push(product);
+     }
+     res.render('users/profile', { userData: profile, profileProducts });
 }))
+
 
 module.exports = router;
