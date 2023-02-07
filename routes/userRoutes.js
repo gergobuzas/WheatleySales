@@ -10,6 +10,8 @@ const passport = require('passport');
 const { userSchema } = require('../schemas/schemas.js');
 const methodOverride = require('method-override');
 const { isLoggedIn } = require('../middleware/isLoggedIn');
+const { validateId } = require('../middleware/validateId')
+
 
 
 
@@ -71,12 +73,12 @@ router.get('/profile', isLoggedIn, async function (req, res) {
      res.render('users/profile', { userData, profileProducts });
 });
 
-router.get('/users/:id', (req, res) => {
+router.get('/users/:id', validateId, (req, res) => {
      const { id } = req.params;
      res.redirect(`/profile/${id}`);
 });
 
-router.get('/profile/:id', catchAsync(async (req, res, next) => {
+router.get('/profile/:id', validateId, catchAsync(async (req, res, next) => {
      const { id } = req.params;
      const profile = await User.findById(id);
      if (!profile) {

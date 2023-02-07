@@ -9,6 +9,7 @@ const { productSchema } = require('../schemas/schemas.js');
 const methodOverride = require('method-override');
 const { isLoggedIn } = require('../middleware/isLoggedIn');
 const { validateProduct } = require('../middleware/validateProduct');
+const { validateId } = require('../middleware/validateId')
 const { isAuthor } = require('../middleware/isAuthor');
 const passport = require('passport');
 const User = require('../models/users')
@@ -38,18 +39,23 @@ router.post('/', isLoggedIn, validateProduct, catchAsync(async (req, res, next) 
      res.redirect(`../products/${newProduct._id}`);
 }))
 
-router.get('/:id', catchAsync(async (req, res, next) => {
+router.get('/:id', validateId, catchAsync(async (req, res, next) => {
      const { id } = req.params;
      const foundProduct = await Product.findById(id).populate('author');
      if (!foundProduct) { 
           req.flash('error', 'The listing doesnt exist');
-          res.redirect('/products');
+          return res.redirect('/products');
      }
      res.render('../views/products/show.ejs', {foundProduct});
 }))
 
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res, next) => {
-     const updatedProduct = await Product.findById(req.params.id).populate('author');
+router.get('/:id/edit', isLoggedIn, validateId, isAuthor, catchAsync(async (req, res, next) => {
+     const updatedProduct = await Product.findById(req.params.id, err => {
+          if(err){
+               req.flash('error', 'Invalid product ID!');
+               return res.redirect('/products');
+          }
+     }).populate('author');
      if (!updatedProduct) { 
           req.flash('error', 'The listing doesnt exist');
           res.redirect('/products');
@@ -58,13 +64,13 @@ router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res, next) 
 }))
 
 
-router.put('/:id', isLoggedIn, isAuthor, validateProduct, catchAsync(async (req, res, next) => {
+router.put('/:id', isLoggedIn, validateId, isAuthor, validateProduct, catchAsync(async (req, res, next) => {
      const updatedProduct = req.body.product;
      const product = await Product.findByIdAndUpdate(req.params.id, updatedProduct);
      res.redirect(`../products/${product._id}`);
 }))
 
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res, next) => {
+router.delete('/:id', isLoggedIn, validateId, isAuthor, catchAsync(async (req, res, next) => {
      const {id} = req.params;
      await Product.findByIdAndDelete(id);
      req.flash('success', 'Succesfully deleted a listing!');
