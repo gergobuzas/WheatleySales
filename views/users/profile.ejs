@@ -1,7 +1,15 @@
-<% layout('/layouts/boilerplate') %>  
-<h1>Profile of <%= userData.username %></h1>
+<% layout('/layouts/boilerplate') %>
+<div> 
+<div class="row">
+     <h1 class="col-md-5">Profile of <%= userData.username %></h1>
+     <h4 class="col-md-7 mt-2">
+          <a class="link-primary" href="/profile/<%= userData._id %>/reviews">Reviews:</a>
+     </h4>
+</div>
+
+
 <% if (profileProducts.length > 0) { %> 
-     <h2><%= userData.username %>'s listings: </h2>
+     <h4><%= userData.username %>'s listings: </h4>
      <% for (let product of profileProducts) { %>
      <div class="card">
           <div class="row">
@@ -10,10 +18,10 @@
                </div>
                <div class="col-md-8">
                     <div class="card-body">
-                         <h5 class="card-title"> <%= product.title %> </h5>
-                         <p class="card-text"> <%= product.description %> </p>
+                         <h5 class="card-title"><%= product.title %></h5>
+                         <p class="card-text"> <%= product.description %></p>
                          <p class="card-text"> <small class="text-muted"> <%= product.location %> </small> </p>
-                         <p class="card-text">$<%= product.price %> </p>
+                         <p class="card-text">$<%= product.price %></p>
                          <a class="btn btn-primary" href="/products/<%= product._id %> ">View</a>
                     </div>
                </div>
@@ -25,6 +33,5 @@
 <% } %> 
 <% if (currentUser === userData) { %>
      <a class="btn btn-success mb-3" href="/products/new">List a product for sale!</a>     
-<% } %> 
-
-<%- include('../partials/review') %> 
+<% } %>
+</div>

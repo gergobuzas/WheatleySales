@@ -17,15 +17,15 @@ const seedDB = async () => {
         const random1000 = Math.floor(Math.random() * 1000);
         var brand = sample(brands);
         var productName = sample(productNames);
-         const newCamp = new Product({
-            author: '63dd50ec33d3ceaa5bb017f6',
+         const newProduct = new Product({
+            author: '63e3d43fd8e4830c405996e6',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${brand} ${productName}`,
             price: `${Math.floor(Math.random() * 1000)}`,
             image: 'https://source.unsplash.com/random/?tech',
             description: `Description for ${brand} ${productName}`
         });
-        await newCamp.save();
+        await newProduct.save();
     }
 }
 

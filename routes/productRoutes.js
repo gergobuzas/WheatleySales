@@ -40,6 +40,7 @@ router.post('/', isLoggedIn, validateProduct, catchAsync(async (req, res, next) 
 }))
 
 router.get('/:id', validateId, catchAsync(async (req, res, next) => {
+     //TODO refactor to controller
      const { id } = req.params;
      const foundProduct = await Product.findById(id).populate('author');
      if (!foundProduct) { 
@@ -50,6 +51,7 @@ router.get('/:id', validateId, catchAsync(async (req, res, next) => {
 }))
 
 router.get('/:id/edit', isLoggedIn, validateId, isAuthor, catchAsync(async (req, res, next) => {
+     //TODO refactor to controller
      const updatedProduct = await Product.findById(req.params.id, err => {
           if(err){
                req.flash('error', 'Invalid product ID!');

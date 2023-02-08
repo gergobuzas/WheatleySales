@@ -1,0 +1,33 @@
+<% layout('/layouts/boilerplate') %> 
+<h1>All reviews</h1>
+<% console.log(userData._id) %> 
+<a class="btn btn-danger mt-2 mb-3" href="/profile/<%= id%>">Go back to the profile</a>
+<a class="btn btn-secondary mt-2 mb-3" href="/profile/<%= id%>/reviews/new">Add your own review of this user!</a>
+
+<% if (userData.reviews) { %> 
+<% for (let review of userData.reviews) { %>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"> <%= review.title %> </h5>
+                    <p class="card-text text-muted"> <%= review.rating %> by <%=  review.author %> </p>
+                    <p class="card-text text-muted"> Submitted on: <%= review.date %> </p>
+                    <a class="btn btn-primary" href="/profile/<%= review._id %>/<%= user %>  ">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %> 
+<% } else { %>
+      <div class="card">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card-body">
+                    <p class="card-text text-muted"> This user currently has no reviews :/ </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<% } %> 

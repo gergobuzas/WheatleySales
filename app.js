@@ -15,7 +15,7 @@ const expressError = require('./utilities/expressError');
 
 const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
-
+const reviewRoutes = require('./routes/reviewRoutes')
 
 main().catch(err => console.log(err));
 
@@ -66,11 +66,12 @@ app.use((req, res, next) => {
 
 
 app.use('/', userRoutes);
+app.use('/', reviewRoutes);
 app.use('/products', productRoutes);
 
 app.get('/', (req, res) => {
      res.render('home.ejs');
-})
+}) 
 
 app.all('*', (req, res, next) => {
      next(new expressError('Page not found', 404));

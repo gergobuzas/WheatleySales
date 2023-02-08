@@ -3,6 +3,7 @@ const User = require('./users')
 const Schema = mongoose.Schema;
 
 const ReviewSchema = new Schema({
+     title: String,
      rating: Number,
      description: String,
      date: Date,
