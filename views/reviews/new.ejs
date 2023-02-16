@@ -1,12 +1,10 @@
-<%= include('../layouts/boilerplate') %> 
-
-
+<% layout('/layouts/boilerplate') %>
      <h2>Add a review to this profile!</h2>
      <h5 class="text-muted">Adding a review to a profile helps others decide, whether a user can be trusted!</h5> 
      <br>
      <form action="/profile/<%= userData._id %>/reviews/new " method="post" class="validated-form" novalidate>
           <div class="mb-3">
-                <label class="form-label" for="location">Give a title to your review:</label>
+                <label class="form-label" for="title">Give a title to your review:</label>
                 <input class="form-control"  type="text" name="title" id="title" placeholder="title" required>
                 <div class="valid-feedback">
                     Looks good!
@@ -16,9 +14,9 @@
                 </div>
           </div>  
           <div class="mb-3">
-               <label class="form-label" for="price">Your rating:</label>
-               <select class="form-select" aria-label="Default select example">
-                    <option selected></option>
+               <label class="form-label" for="rating">Your rating:</label>
+               <select class="form-select" aria-label="Default select example" id="rating" name="rating">
+                    <option selected disabled></option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>

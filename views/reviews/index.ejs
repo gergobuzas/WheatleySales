@@ -1,20 +1,26 @@
 <% layout('/layouts/boilerplate') %> 
 <h1>All reviews</h1>
-<% console.log(userData._id) %> 
 <a class="btn btn-danger mt-2 mb-3" href="/profile/<%= id%>">Go back to the profile</a>
-<a class="btn btn-secondary mt-2 mb-3" href="/profile/<%= id%>/reviews/new">Add your own review of this user!</a>
+<% if ((currentUser && userData.username != currentUser.username) || !currentUser) { %> 
+     <a class="btn btn-secondary mt-2 mb-3" href="/profile/<%= id%>/reviews/new">Add your own review of this user!</a>
+<% } %> 
 
-<% if (userData.reviews) { %> 
-<% for (let review of userData.reviews) { %>
+<% if (userData.reviews.length > 0) { %> 
+<% for (let review of reviews) {  %>
     <div class="card">
         <div class="row">
             <div class="col-md-8">
                 <div class="card-body">
                     <h5 class="card-title"> <%= review.title %> </h5>
-                    <p class="card-text text-muted"> <%= review.rating %> by <%=  review.author %> </p>
+                    <p class="card-text text-muted">Rating: <%= review.rating %></p>
+                    <p class="card-text text-muted">by <%=  review.author.username %> </p>
                     <p class="card-text text-muted"> Submitted on: <%= review.date %> </p>
-                    <a class="btn btn-primary" href="/profile/<%= review._id %>/<%= user %>  ">View</a>
-                </div>
+                    <a class="btn btn-primary" href="/profile/<%= userData._id%>/reviews/<%=review._id%>" >View</a>
+
+                    <% if (currentUser && (review.author.username === currentUser.username)) {  %>
+                         <a class="btn btn-danger" href="/profile/<%= userData._id%>/reviews/<%=review._id%>/?_method=DELETE" method="post"" >Delete</a>
+                    <% } %>
+               </div>
             </div>
         </div>
     </div>
