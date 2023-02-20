@@ -1,4 +1,6 @@
 <% layout('/layouts/boilerplate') %> 
+
+
 <h1>All reviews</h1>
 <a class="btn btn-danger mt-2 mb-3" href="/profile/<%= id%>">Go back to the profile</a>
 <% if ((currentUser && userData.username != currentUser.username) || !currentUser) { %> 
@@ -11,14 +13,18 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title"> <%= review.title %> </h5>
-                    <p class="card-text text-muted">Rating: <%= review.rating %></p>
+                    <h5 class="card-title"><%=review.title%></h5>
+                    <p>
+                         <% for(let i = 0; i < review.rating; i++) { %>
+                              &#11088;
+                         <% } %> 
+                    </p>
                     <p class="card-text text-muted">by <%=  review.author.username %> </p>
                     <p class="card-text text-muted"> Submitted on: <%= review.date %> </p>
-                    <a class="btn btn-primary" href="/profile/<%= userData._id%>/reviews/<%=review._id%>" >View</a>
-
                     <% if (currentUser && (review.author.username === currentUser.username)) {  %>
-                         <a class="btn btn-danger" href="/profile/<%= userData._id%>/reviews/<%=review._id%>/?_method=DELETE" method="post"" >Delete</a>
+                         <form method="POST" action="/profile/<%= userData._id%>/reviews/<%=review._id%>/?_method=DELETE">
+                              <button class="btn btn-danger" type="submit">Delete</button>
+                         </form>
                     <% } %>
                </div>
             </div>

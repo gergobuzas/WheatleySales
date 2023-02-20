@@ -10,7 +10,7 @@ const methodOverride = require('method-override');
 const { isLoggedIn } = require('../middleware/isLoggedIn');
 const { validateProduct } = require('../middleware/validateProduct');
 const { validateId } = require('../middleware/validateId')
-const { isAuthor } = require('../middleware/isAuthor');
+const { isAuthorProducts } = require('../middleware/isAuthorProducts');
 const passport = require('passport');
 const User = require('../models/users')
 const { userSchema } = require('../schemas/schemas.js');
@@ -50,7 +50,7 @@ router.get('/:id', validateId, catchAsync(async (req, res, next) => {
      res.render('../views/products/show.ejs', {foundProduct});
 }))
 
-router.get('/:id/edit', isLoggedIn, validateId, isAuthor, catchAsync(async (req, res, next) => {
+router.get('/:id/edit', isLoggedIn, validateId, isAuthorProducts, catchAsync(async (req, res, next) => {
      //TODO refactor to controller
      const updatedProduct = await Product.findById(req.params.id, err => {
           if(err){
@@ -66,13 +66,13 @@ router.get('/:id/edit', isLoggedIn, validateId, isAuthor, catchAsync(async (req,
 }))
 
 
-router.put('/:id', isLoggedIn, validateId, isAuthor, validateProduct, catchAsync(async (req, res, next) => {
+router.put('/:id', isLoggedIn, validateId, isAuthorProducts, validateProduct, catchAsync(async (req, res, next) => {
      const updatedProduct = req.body.product;
      const product = await Product.findByIdAndUpdate(req.params.id, updatedProduct);
      res.redirect(`../products/${product._id}`);
 }))
 
-router.delete('/:id', isLoggedIn, validateId, isAuthor, catchAsync(async (req, res, next) => {
+router.delete('/:id', isLoggedIn, validateId, isAuthorProducts, catchAsync(async (req, res, next) => {
      const {id} = req.params;
      await Product.findByIdAndDelete(id);
      req.flash('success', 'Succesfully deleted a listing!');

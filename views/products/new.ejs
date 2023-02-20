@@ -4,7 +4,7 @@
         Add a new product
     </h1>
     <div class="col-6 offset-3">
-        <form action="/products" method="post" class="validated-form" novalidate>
+        <form action="/products" method="post" class="validated-form" novalidate enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Name of the product you want to sell:</label>
                 <input class="form-control" type="text" name="product[title]" id="title" placeholder="name" required>
@@ -39,7 +39,7 @@
                     </div>
                 </div>                  
             </div>
-            <div class="mb-3">
+<!--             <div class="mb-3">
                 <label class="form-label" for="image">Image URL of your product:</label>
                 <input class="form-control"  type="text" name="product[image]" id="image" placeholder="url" required>
                 <div class="valid-feedback">
@@ -48,7 +48,7 @@
                 <div class="invalid-feedback">
                     Please give a URL!
                 </div>
-            </div>
+            </div> -->
             <div class="mb-3">
                 <label class="form-label" for="description">Description of your product:</label>
                 <textarea class="form-control"  type="text" name="product[description]" id="description" placeholder="description" required></textarea>

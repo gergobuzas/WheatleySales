@@ -80,7 +80,7 @@ router.get('/users/:id', validateId, (req, res) => {
 
 router.get('/profile/:id', validateId, catchAsync(async (req, res, next) => {
      const { id } = req.params;
-     const profile = await User.findById(id);
+     const profile = await User.findById({ _id: id });
      if (!profile) {
           req.flash('error', "Profile doesn't exist!");
           return res.redirect('/products');
