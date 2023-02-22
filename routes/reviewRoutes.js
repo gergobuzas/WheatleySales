@@ -78,7 +78,7 @@ router.delete('/profile/:id/reviews/:reviewId', isLoggedIn, isAuthorReviews, cat
           if (err instanceof mongoose.CastError) {
                req.flash('error', 'Invalid user ID');
           }
-          return res.redirect('/products');
+            return res.redirect('/products');
      }
 }));
 

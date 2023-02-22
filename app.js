@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+     require('dotenv').config();
+}
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -37,7 +40,7 @@ const sessionConfig = {
           httpOnly: true,
           expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
           maxAge: 1000 * 60 * 60 * 24 * 7
-     } 
+     }
 }
 
 
@@ -50,7 +53,9 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({
+     extended: true
+})) // for parsing application/x-www-form-urlencoded
 app.use(methodOverride('_method')) // override with POST having ?_method=DELETE
 
 app.use(passport.initialize());
@@ -71,7 +76,7 @@ app.use('/products', productRoutes);
 
 app.get('/', (req, res) => {
      res.render('home.ejs');
-}) 
+})
 
 app.all('*', (req, res, next) => {
      next(new expressError('Page not found', 404));
@@ -79,10 +84,14 @@ app.all('*', (req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-     const { statusCode = 500} = err;
-     if(!err.message) err.message = 'Oh no! Something went wrong!'
+     const {
+          statusCode = 500
+     } = err;
+     if (!err.message) err.message = 'Oh no! Something went wrong!'
      res.status(err);
-     res.status(statusCode).render('error.ejs', { err } );
+     res.status(statusCode).render('error.ejs', {
+          err
+     });
 })
 
 app.listen(3000, () => {

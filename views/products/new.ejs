@@ -1,45 +1,52 @@
-<% layout('/layouts/boilerplate') %> 
+<% layout('/layouts/boilerplate') %>
 <div class="row">
-    <h1 class="text-center">
-        Add a new product
-    </h1>
-    <div class="col-6 offset-3">
-        <form action="/products" method="post" class="validated-form" novalidate enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label" for="title">Name of the product you want to sell:</label>
-                <input class="form-control" type="text" name="product[title]" id="title" placeholder="name" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please name your listing!
-                </div>                          
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="location">The location where you are selling:</label>
-                <input class="form-control"  type="text" name="product[location]" id="location" placeholder="location" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please give a location!
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="price">Price of the product you are selling:</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="price-label">$</span>
-                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="Amount (to the nearest dollar)"
-                    aria-describedby="price-label" name="product[price]" required>
+     <h1 class="text-center">
+          Add a new product
+     </h1>
+     <div class="col-6 offset-3">
+          <form action="/products" method="post" class="validated-form" novalidate enctype="multipart/form-data">
+               <div class="mb-3">
+                    <label class="form-label" for="title">Name of the product you want to sell:</label>
+                    <input class="form-control" type="text" name="product[title]" id="title" placeholder="name"
+                         required>
                     <div class="valid-feedback">
-                        Looks good!
+                         Looks good!
                     </div>
                     <div class="invalid-feedback">
-                        Please give a price!
+                         Please name your listing!
                     </div>
-                </div>                  
-            </div>
-<!--             <div class="mb-3">
+               </div>
+               <div class="mb-3">
+                    <label class="form-label" for="location">The location where you are selling:</label>
+                    <input class="form-control" type="text" name="product[location]" id="location"
+                         placeholder="location" required>
+                    <div class="valid-feedback">
+                         Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                         Please give a location!
+                    </div>
+               </div>
+               <div class="mb-3">
+                    <label class="form-label" for="price">Price of the product you are selling:</label>
+                    <div class="input-group mb-3">
+                         <span class="input-group-text" id="price-label">$</span>
+                         <input type="text" class="form-control" id="price" placeholder="0.00"
+                              aria-label="Amount (to the nearest dollar)" aria-describedby="price-label"
+                              name="product[price]" required>
+                         <div class="valid-feedback">
+                              Looks good!
+                         </div>
+                         <div class="invalid-feedback">
+                              Please give a price!
+                         </div>
+                    </div>
+               </div>
+               <div class="mb-3">
+                    <label class="form-label" for="image">Images:</label>
+                    <input class="form-control" type="file" name="image" id="image" multiple>
+               </div>
+               <!--             <div class="mb-3">
                 <label class="form-label" for="image">Image URL of your product:</label>
                 <input class="form-control"  type="text" name="product[image]" id="image" placeholder="url" required>
                 <div class="valid-feedback">
@@ -49,21 +56,19 @@
                     Please give a URL!
                 </div>
             </div> -->
-            <div class="mb-3">
-                <label class="form-label" for="description">Description of your product:</label>
-                <textarea class="form-control"  type="text" name="product[description]" id="description" placeholder="description" required></textarea>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Describe the product you are trying to sell!
-                </div>
-            </div>
-            <button class="btn btn-success mb-3">Submit your listing</button>
-        </form>
-        <a class="btn btn-danger" href="/products">Go back to all listings!</a>
-    </div>
+               <div class="mb-3">
+                    <label class="form-label" for="description">Description of your product:</label>
+                    <textarea class="form-control" type="text" name="product[description]" id="description"
+                         placeholder="description" required></textarea>
+                    <div class="valid-feedback">
+                         Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                         Describe the product you are trying to sell!
+                    </div>
+               </div>
+               <button class="btn btn-success mb-3">Submit your listing</button>
+          </form>
+          <a class="btn btn-danger" href="/products">Go back to all listings!</a>
+     </div>
 </div>
-
-
-
