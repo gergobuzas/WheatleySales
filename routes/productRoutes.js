@@ -33,7 +33,9 @@ const multer = require('multer')
 const upload = multer({
      storage
 })
-
+const {
+     cloudinary
+} = require('../cloudinary/cloudinary');
 
 
 router.use(express.json()) // for parsing application/json
@@ -118,6 +120,20 @@ router.put('/:id', isLoggedIn, validateId, isAuthorProducts, upload.array('image
      }))
      product.images.push(...images);
      await product.save();
+     if (req.body.deleteImages) {
+          for (let filename of req.body.deleteImages) {
+               await cloudinary.uploader.destroy(filename);
+          }
+          await product.updateOne({
+               $pull: {
+                    images: {
+                         filename: {
+                              $in: req.body.deleteImages
+                         }
+                    }
+               }
+          });
+     }
      res.redirect(`../products/${product._id}`);
 }))
 

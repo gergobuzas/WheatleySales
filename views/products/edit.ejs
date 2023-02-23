@@ -25,9 +25,28 @@
                               name="product[price]" value="<%= updatedProduct.price %>" required>
                     </div>
                </div>
-               <div class="mb-3">
+               <div class="mb-4">
                     <label class="form-label" for="image">Images:</label>
                     <input class="form-control" type="file" name="image" id="image" multiple>
+               </div>
+               <h4>Uploaded images:</h4>
+               <div class="d-flex justify-content-center p-3">
+
+                    <div class="row align-items-end">
+                         <% updatedProduct.images.forEach( (img, i) => { %>
+                         <div class="col-md-6 p-3">
+                              <img src="<%= img.thumbnail %>" class="img-thumbnail img-fluid"
+                                   style="max-width: 200px;min-width: 200px;max-height: 200px;min-height: 100px;">
+                              <div class="form-check">
+                                   <input class="form-check-input" type="checkbox" value="<%= img.filename %>"
+                                        id="image-<%=i%>" name="deleteImages[]">
+                                   <label class="form-check-label" for="image-<%=i%>">
+                                        Delete
+                                   </label>
+                              </div>
+                         </div>
+                         <% }); %>
+                    </div>
                </div>
                <div class="mb-3">
                     <label class="form-label" for="description">Description of your product:</label>
