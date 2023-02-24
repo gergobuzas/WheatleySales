@@ -3,7 +3,8 @@
      <div class="row">
           <h1 class="col-md-5">Profile of <%= userData.username %></h1>
           <h4 class="col-md-7 mt-2">
-               <a class="link-primary" href="/profile/<%= userData._id %>/reviews">Reviews:</a>
+               <a class="link-primary" href="/profile/<%= userData._id %>/reviews"
+                    style="text-decoration: none;">reviews</a>
           </h4>
      </div>
 
@@ -14,7 +15,13 @@
      <div class="card">
           <div class="row">
                <div class="col-md-4">
+                    <% if (product.images.length > 0) { %>
                     <img class="img-fluid" src="<%= product.images[product.images.length - 1].url %>" alt="">
+                    <% } else { %>
+                    <img class="img-fluid"
+                         src="https://res.cloudinary.com/decc6uxs6/image/upload/v1677193348/WheatleySales/icon-image-not-found-free-vector_nypm8f.webp%>"
+                         alt="Image not found">
+                    <% } %>
                </div>
                <div class="col-md-8">
                     <div class="card-body">

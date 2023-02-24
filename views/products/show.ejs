@@ -24,8 +24,8 @@
           <div class="card">
                <div class="card-body">
                     <h5 class="card-title"><%= foundProduct.title %></h5>
-                    <p class="card-text">Submitted by: <a
-                              href="/users/<%= foundProduct.author._id %> "><%= foundProduct.author.username %></a></p>
+                    <p class="card-text">Submitted by: <a href="/users/<%= foundProduct.author._id %> "
+                              style="text-decoration: none"><%= foundProduct.author.username %></a></p>
                     <p class="card-text"><%= foundProduct.description %></p>
                </div>
                <ul class="list-group list-group-flush">
